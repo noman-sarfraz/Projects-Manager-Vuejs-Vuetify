@@ -62,7 +62,7 @@ export default {
           title: this.title,
           content: this.information,
           due: format(parseISO(this.due), 'dd MMM yyyy'),
-          person: 'The Net Ninja',
+          person: 'Noman Sarfraz',
           status: 'ongoing'
         }        
 
@@ -71,6 +71,10 @@ export default {
           .then(() => {
             this.loading = false
             this.dialog = false
+            // empty the input fields
+            this.title = ''
+            this.information = ''
+            this.due = ''
             this.$emit('projectAdded') })
           .catch(err => console.log("error while adding doc: ", err))
 

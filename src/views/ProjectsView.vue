@@ -39,15 +39,31 @@ import { collection, onSnapshot } from "firebase/firestore";
     },
     computed: {
       myProjects() {
-        return this.projects.filter(project => project.person === 'The Net Ninja')
+        return this.projects.filter(project => project.person === 'Noman Sarfraz')
       }
     },
     created() {
       onSnapshot(collection(db, "projects"), (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           if (change.type === "added") {
-            this.projects.push(change.doc.data())
+            this.projects.push({...change.doc.data(), id: change.doc.id})
           }
+          else if (change.type === "modified") {
+            let index = -1
+            this.projects.every((project, i) => {
+              if(project.id === change.doc.id) {
+                index = i
+                return false
+              }
+              return true
+            })
+            if(index != -1) {
+              this.projects[index] = change.doc.data()
+            } else {
+              console.log("id not found")
+            }
+          }
+
         });
       });
     }
